@@ -16,12 +16,24 @@ case "$1" in
     mkdir -p local_data
     python3 generator/generate.py local_data
     ;;
+  
+  build_reporter)
+    docker build -t html-reporter ./reporter
+    ;;
+
+  run_reporter)
+    mkdir -p data
+    docker run --rm -v "$(pwd)/data:/data" html-reporter
+    ;;
 
   *)
-    echo "Использование:"
-    echo "./run.sh build_generator      # собрать образ генератора"
-    echo "./run.sh run_generator        # запустить контейнер и создать data/data.csv"
-    echo "./run.sh create_local_data    # создать local_data/data.csv локально"
+    echo "Unknown command: $1"
+    echo "Available commands:"
+    echo "  build_generator"
+    echo "  run_generator"
+    echo "  create_local_data"
+    echo "  build_reporter"
+    echo "  run_reporter"
     exit 1
     ;;
 esac
